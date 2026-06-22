@@ -104,3 +104,12 @@ Sesuai instruksi penugasan poin 7, proyek ini melampirkan:
 2. `.env.example` (Template konfigurasi environment variable)
 3. `FINAL_PROJECT_REPORT.md` (Laporan resmi proyek akhir lengkap)
 4. `LMS_Postman_Collection.json` (Koleksi endpoint API untuk pengujian manual di Postman)
+
+---
+
+## 📷 Tampilan Dokumentasi API (Swagger UI)
+
+Berikut adalah tampilan antarmuka dokumentasi Swagger UI dari API proyek Simple LMS:
+
+![Swagger API Docs Preview](./swagger_demo_preview.png)
+
