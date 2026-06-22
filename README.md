@@ -111,5 +111,15 @@ Sesuai instruksi penugasan poin 7, proyek ini melampirkan:
 
 Berikut adalah tampilan antarmuka dokumentasi Swagger UI dari API proyek Simple LMS:
 
-![Swagger API Docs Preview](./swagger_demo_preview.png)
+admin
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/18e0cf40-fa21-4d60-8eab-c20403475578" />
+
+instructor
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/d9817a66-0b62-4a8f-aa98-73257b0628a3" />
+
+student
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/19961ae7-cd0c-4f8b-891e-8f0a95ea9de1" />
+
+
+
 
