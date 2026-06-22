@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple LMS - Demo UI</title>
+    <!-- Google Font: Outfit -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --primary: #4f46e5;
+            --primary-hover: #4338ca;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
+            --success: #10b981;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            line-height: 1.6;
+            padding-bottom: 60px;
+        }
+
+        header {
+            background-color: var(--card-bg);
+            border-bottom: 1px solid var(--border);
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.05);
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .role-badge {
+            background-color: #e0e7ff;
+            color: var(--primary);
+            padding: 4px 10px;
+            border-radius: 9999px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .btn {
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: none;
+            font-size: 14px;
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-hover);
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            border: 1px solid var(--border);
+            color: var(--text-main);
+        }
+
+        .btn-outline:hover {
+            background-color: #f1f5f9;
+        }
+
+        .btn-danger {
+            background-color: var(--danger);
+            color: white;
+        }
+
+        .btn-danger:hover {
+            opacity: 0.9;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        /* Login Card */
+        .login-wrapper {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 70vh;
+        }
+
+        .login-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 40px;
+            width: 100%;
+            max-width: 400px;
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+        }
+
+        .login-card h2 {
+            margin-bottom: 8px;
+            font-weight: 700;
+        }
+
+        .login-card p {
+            color: var(--text-muted);
+            margin-bottom: 24px;
+            font-size: 14px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 10px 14px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            outline: none;
+            font-size: 14px;
+            transition: border-color 0.2s;
+        }
+
+        .form-control:focus {
+            border-color: var(--primary);
+        }
+
+        /* Courses List UI */
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .courses-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 24px;
+        }
+
+        .course-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            box-shadow: 0 2px 4px rgb(0 0 0 / 0.02);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .course-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.05);
+        }
+
+        .course-cat {
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            color: var(--primary);
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+        }
+
+        .course-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .course-desc {
+            color: var(--text-muted);
+            font-size: 14px;
+            margin-bottom: 16px;
+            flex-grow: 1;
+        }
+
+        .course-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid var(--border);
+            padding-top: 16px;
+            margin-top: 16px;
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+
+        .course-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 16px;
+        }
+
+        /* Modal Form */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(4px);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background-color: var(--card-bg);
+            border-radius: 16px;
+            width: 100%;
+            max-width: 500px;
+            padding: 32px;
+            box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        .modal-close {
+            font-size: 24px;
+            cursor: pointer;
+            color: var(--text-muted);
+        }
+
+        .alert {
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 14px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .alert-danger {
+            background-color: #fee2e2;
+            color: var(--danger);
+            border: 1px solid #fca5a5;
+        }
+
+        .demo-accounts {
+            background-color: #f8fafc;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 12px;
+            margin-top: 16px;
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo">Simple LMS Dashboard</div>
+        <div class="user-profile" id="userProfile" style="display: none;">
+            <span id="userName" style="font-weight: 600;">Nama</span>
+            <span class="role-badge" id="userRole">STUDENT</span>
+            <button class="btn btn-outline" onclick="logout()">Logout</button>
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- ALERT BOX -->
+        <div class="alert alert-danger" id="globalAlert"></div>
+
+        <!-- 1. LOGIN SECTION -->
+        <div class="login-wrapper" id="loginSection">
+            <div class="login-card">
+                <h2>Masuk Akun</h2>
+                <p>Gunakan akun demo untuk melakukan pengujian manual</p>
+                
+                <form id="loginForm" onsubmit="handleLogin(event)">
+                    <div class="form-group">
+                        <label for="username">Username</label>
+                        <input type="text" id="username" class="form-control" placeholder="Contoh: student1" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" id="password" class="form-control" placeholder="Masukkan password" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary" style="width: 100%; padding: 12px;">Login</button>
+                </form>
+
+                <div class="demo-accounts">
+                    <strong>Pilihan Akun Demo:</strong><br>
+                    🔑 Admin: <code>admin</code> / <code>admin123</code> (Bisa Edit/Hapus)<br>
+                    🔑 Instructor: <code>instructor1</code> / <code>instructor123</code> (Bisa Edit/Hapus)<br>
+                    🔑 Student: <code>student1</code> / <code>student123</code> (Hanya Melihat)
+                </div>
+            </div>
+        </div>
+
+        <!-- 2. MAIN DASHBOARD SECTION -->
+        <div id="dashboardSection" style="display: none;">
+            <div class="dashboard-header">
+                <div>
+                    <h2 id="dashboardTitle">Semua Program Course</h2>
+                    <p style="color: var(--text-muted);">Pelajari keahlian baru secara terstruktur</p>
+                </div>
+                <!-- ADD COURSE BUTTON (HANYA TERLIHAT OLEH ADMIN / INSTRUCTOR) -->
+                <button class="btn btn-primary" id="addCourseBtn" style="display: none;" onclick="openModal()">+ Tambah Course Baru</button>
+            </div>
+
+            <div class="courses-grid" id="coursesList">
+                <!-- Kursus akan dimuat di sini secara dinamis -->
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL FORM UNTUK TAMBAH/EDIT COURSE -->
+    <div class="modal" id="courseModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalTitle">Tambah Course Baru</h3>
+                <span class="modal-close" onclick="closeModal()">&times;</span>
+            </div>
+            <form id="courseForm" onsubmit="saveCourse(event)">
+                <input type="hidden" id="courseId">
+                <div class="form-group">
+                    <label for="courseTitle">Judul Course</label>
+                    <input type="text" id="courseTitle" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="courseDesc">Deskripsi Singkat</label>
+                    <textarea id="courseDesc" class="form-control" style="height: 100px;" required></textarea>
+                </div>
+                <div style="display: flex; justify-content: flex-end; gap: 10px;">
+                    <button type="button" class="btn btn-outline" onclick="closeModal()">Batal</button>
+                    <button type="submit" class="btn btn-primary">Simpan</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = "http://127.0.0.1:8000/api";
+        let token = localStorage.getItem("token") || "";
+        let userRole = localStorage.getItem("role") || "";
+        let username = localStorage.getItem("username") || "";
+
+        // Pengecekan awal saat halaman dimuat
+        document.addEventListener("DOMContentLoaded", () => {
+            if (token) {
+                showDashboard();
+            } else {
+                showLogin();
+            }
+        });
+
+        function showLogin() {
+            document.getElementById("loginSection").style.display = "flex";
+            document.getElementById("dashboardSection").style.display = "none";
+            document.getElementById("userProfile").style.display = "none";
+        }
+
+        function showDashboard() {
+            document.getElementById("loginSection").style.display = "none";
+            document.getElementById("dashboardSection").style.display = "block";
+            
+            // Atur profil user di header
+            document.getElementById("userProfile").style.display = "flex";
+            document.getElementById("userName").innerText = username;
+            document.getElementById("userRole").innerText = userRole;
+
+            // Atur tombol tambah berdasarkan role (Hanya Admin atau Instructor)
+            const addBtn = document.getElementById("addCourseBtn");
+            if (userRole === "admin" || userRole === "instructor") {
+                addBtn.style.display = "block";
+            } else {
+                addBtn.style.display = "none";
+            }
+
+            loadCourses();
+        }
+
+        // Login Handler
+        async function handleLogin(e) {
+            e.preventDefault();
+            showAlert(""); // reset alert
+            const u = document.getElementById("username").value;
+            const p = document.getElementById("password").value;
+
+            try {
+                const response = await fetch(`${API_URL}/auth/login`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ username: u, password: p })
+                });
+
+                const data = await response.json();
+                if (response.ok) {
+                    token = data.token;
+                    userRole = data.role;
+                    username = data.username;
+                    
+                    localStorage.setItem("token", token);
+                    localStorage.setItem("role", userRole);
+                    localStorage.setItem("username", username);
+
+                    showDashboard();
+                } else {
+                    showAlert(data.message || "Username atau Password salah");
+                }
+            } catch (err) {
+                showAlert("Gagal terhubung ke API Server. Pastikan Django backend Anda menyala.");
+            }
+        }
+
+        function logout() {
+            localStorage.clear();
+            token = "";
+            userRole = "";
+            username = "";
+            showLogin();
+        }
+
+        // Muat Daftar Course dari API
+        async function loadCourses() {
+            try {
+                const response = await fetch(`${API_URL}/courses/`, {
+                    headers: { "Authorization": `Bearer ${token}` }
+                });
+                if (!response.ok) {
+                    if (response.status === 401) logout();
+                    return;
+                }
+                const courses = await response.json();
+                const container = document.getElementById("coursesList");
+                container.innerHTML = "";
+
+                if (courses.length === 0) {
+                    container.innerHTML = "<p style='color: var(--text-muted); grid-column: 1/-1;'>Belum ada course terdaftar.</p>";
+                    return;
+                }
+
+                courses.forEach(c => {
+                    const hasEditPermission = (userRole === "admin" || (userRole === "instructor" && c.instructor.id === c.instructor.id)); // Simpel validation
+                    
+                    // Aksi tombol edit/hapus
+                    let actionsHtml = "";
+                    if (userRole === "admin" || userRole === "instructor") {
+                        actionsHtml = `
+                            <div class="course-actions">
+                                <button class="btn btn-outline" style="padding: 4px 10px; font-size:12px;" onclick="openEditModal(${c.id}, '${escapeHtml(c.title)}', '${escapeHtml(c.description)}')">Edit</button>
+                                <button class="btn btn-danger" style="padding: 4px 10px; font-size:12px;" onclick="deleteCourse(${c.id})">Hapus</button>
+                            </div>
+                        `;
+                    }
+
+                    const card = document.createElement("div");
+                    card.className = "course-card";
+                    card.innerHTML = `
+                        <div>
+                            <div class="course-cat">${c.category ? c.category.name : 'UMUM'}</div>
+                            <h3 class="course-title">${escapeHtml(c.title)}</h3>
+                            <p class="course-desc">${escapeHtml(c.description)}</p>
+                        </div>
+                        <div>
+                            <div class="course-meta">
+                                <span>👨‍🏫 ${escapeHtml(c.instructor.username)}</span>
+                                <span style="background: #f1f5f9; padding: 2px 6px; border-radius: 4px;">ID: ${c.id}</span>
+                            </div>
+                            ${actionsHtml}
+                        </div>
+                    `;
+                    container.appendChild(card);
+                });
+            } catch (err) {
+                console.error("Gagal memuat course:", err);
+            }
+        }
+
+        // Modal Controls
+        function openModal() {
+            document.getElementById("modalTitle").innerText = "Tambah Course Baru";
+            document.getElementById("courseId").value = "";
+            document.getElementById("courseTitle").value = "";
+            document.getElementById("courseDesc").value = "";
+            document.getElementById("courseModal").style.display = "flex";
+        }
+
+        function openEditModal(id, title, desc) {
+            document.getElementById("modalTitle").innerText = "Edit Course";
+            document.getElementById("courseId").value = id;
+            document.getElementById("courseTitle").value = title;
+            document.getElementById("courseDesc").value = desc;
+            document.getElementById("courseModal").style.display = "flex";
+        }
+
+        function closeModal() {
+            document.getElementById("courseModal").style.display = "none";
+        }
+
+        // Simpan / Edit Course
+        async function saveCourse(e) {
+            e.preventDefault();
+            const id = document.getElementById("courseId").value;
+            const title = document.getElementById("courseTitle").value;
+            const description = document.getElementById("courseDesc").value;
+
+            const isEdit = id !== "";
+            const url = isEdit ? `${API_URL}/courses/${id}` : `${API_URL}/courses/create`;
+            const method = isEdit ? "PUT" : "POST";
+
+            try {
+                const response = await fetch(url, {
+                    method: method,
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${token}`
+                    },
+                    body: JSON.stringify({ title, description })
+                });
+
+                if (response.ok) {
+                    closeModal();
+                    loadCourses();
+                } else {
+                    const data = await response.json();
+                    alert(data.message || "Gagal menyimpan course.");
+                }
+            } catch (err) {
+                alert("Terjadi kesalahan jaringan.");
+            }
+        }
+
+        // Hapus Course
+        async function deleteCourse(id) {
+            if (!confirm("Apakah Anda yakin ingin menghapus course ini?")) return;
+
+            try {
+                const response = await fetch(`${API_URL}/courses/${id}`, {
+                    method: "DELETE",
+                    headers: { "Authorization": `Bearer ${token}` }
+                });
+
+                if (response.ok) {
+                    loadCourses();
+                } else {
+                    const data = await response.json();
+                    alert(data.message || "Gagal menghapus course.");
+                }
+            } catch (err) {
+                alert("Terjadi kesalahan jaringan.");
+            }
+        }
+
+        // Helpers
+        function showAlert(msg) {
+            const el = document.getElementById("globalAlert");
+            if (msg) {
+                el.innerText = msg;
+                el.style.display = "block";
+            } else {
+                el.style.display = "none";
+            }
+        }
+
+        function escapeHtml(text) {
+            if (!text) return "";
+            return text
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+        }
+    </script>
+</body>
+</html>
