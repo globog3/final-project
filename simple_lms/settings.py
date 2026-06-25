@@ -114,17 +114,22 @@ AUTH_USER_MODEL = 'lms.User'
 # CORS
 CORS_ALLOW_ALL_ORIGINS = True
 
-# Redis Cache configuration
-REDIS_URL = os.getenv('REDIS_URL', 'redis://localhost:6379/0')
-if not os.path.exists('/.dockerenv') and 'redis://redis' in REDIS_URL:
-    REDIS_URL = 'redis://localhost:6379/0'
-
-CACHES = {
-    'default': {
-        'BACKEND': 'django.core.cache.backends.redis.RedisCache',
-        'LOCATION': REDIS_URL,
+# Redis Cache configuration inside Docker, otherwise Local Memory Cache for instant local testing without Redis server
+if os.path.exists('/.dockerenv'):
+    REDIS_URL = os.getenv('REDIS_URL', 'redis://redis:6379/0')
+    CACHES = {
+        'default': {
+            'BACKEND': 'django.core.cache.backends.redis.RedisCache',
+            'LOCATION': REDIS_URL,
+        }
     }
-}
+else:
+    CACHES = {
+        'default': {
+            'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+            'LOCATION': 'lms-local-cache',
+        }
+    }
 
 
 # JWT Settings
