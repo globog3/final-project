@@ -46,7 +46,11 @@ def invalidate_course_cache(course_id=None):
     Clear course lists and specific course details cache
     """
     # Simple and robust invalidation: clear the whole cache
-    cache.clear()
+    try:
+        cache.clear()
+    except Exception:
+        pass
+
 
 # ==========================================
 # AUTH ENDPOINTS
@@ -131,7 +135,11 @@ def list_courses(
     # --- Redis Caching ---
     # Create a unique cache key based on query parameters
     cache_key = f"courses:list:search={search}:cat={category_id}:inst={instructor_id}:sort={sort_by}"
-    cached_data = cache.get(cache_key)
+    cached_data = None
+    try:
+        cached_data = cache.get(cache_key)
+    except Exception:
+        pass
     
     if cached_data:
         # Load serialized courses from cache and return
@@ -172,7 +180,10 @@ def list_courses(
     
     # Save serialized IDs list to Redis (cache expires in 5 minutes)
     course_ids = [c.id for c in courses_list]
-    cache.set(cache_key, json.dumps(course_ids), timeout=300)
+    try:
+        cache.set(cache_key, json.dumps(course_ids), timeout=300)
+    except Exception:
+        pass
 
     return courses_list
 
@@ -181,13 +192,21 @@ def list_courses(
 def get_course(request, course_id: int):
     # --- Redis Caching for Detail ---
     cache_key = f"course:detail:{course_id}"
-    cached_course = cache.get(cache_key)
+    cached_course = None
+    try:
+        cached_course = cache.get(cache_key)
+    except Exception:
+        pass
+        
     if cached_course:
         return 200, Course.objects.get(id=course_id)
 
     try:
         course = Course.objects.select_related('category', 'instructor').get(id=course_id)
-        cache.set(cache_key, course, timeout=300)
+        try:
+            cache.set(cache_key, course, timeout=300)
+        except Exception:
+            pass
         return 200, course
     except Course.DoesNotExist:
         return 404, {"message": "Course tidak ditemukan"}

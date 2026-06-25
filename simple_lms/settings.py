@@ -55,9 +55,9 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'simple_lms.wsgi.application'
 
-# Database configuration (PostgreSQL if env vars present, otherwise SQLite for local tests)
+# Database configuration (PostgreSQL if inside Docker or DB_HOST is custom, otherwise SQLite for local tests)
 DB_HOST = os.getenv('DB_HOST')
-if DB_HOST:
+if DB_HOST and (os.path.exists('/.dockerenv') or DB_HOST != 'db'):
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql',
@@ -75,6 +75,7 @@ else:
             'NAME': BASE_DIR / 'db.sqlite3',
         }
     }
+
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -115,12 +116,16 @@ CORS_ALLOW_ALL_ORIGINS = True
 
 # Redis Cache configuration
 REDIS_URL = os.getenv('REDIS_URL', 'redis://localhost:6379/0')
+if not os.path.exists('/.dockerenv') and 'redis://redis' in REDIS_URL:
+    REDIS_URL = 'redis://localhost:6379/0'
+
 CACHES = {
     'default': {
         'BACKEND': 'django.core.cache.backends.redis.RedisCache',
         'LOCATION': REDIS_URL,
     }
 }
+
 
 # JWT Settings
 JWT_SECRET_KEY = os.getenv('JWT_SECRET_KEY', SECRET_KEY)
