@@ -188,7 +188,7 @@ def list_courses(
     return courses_list
 
 
-@course_router.get("/{course_id}", auth=jwt_auth, response={200: CourseSchema, 404: ErrorSchema})
+@course_router.get("/{int:course_id}", auth=jwt_auth, response={200: CourseSchema, 404: ErrorSchema})
 def get_course(request, course_id: int):
     # --- Redis Caching for Detail ---
     cache_key = f"course:detail:{course_id}"
@@ -237,7 +237,7 @@ def create_course(request, data: CourseCreateSchema):
     return 201, course
 
 
-@course_router.put("/{course_id}", auth=jwt_auth, response={200: CourseSchema, 403: ErrorSchema, 404: ErrorSchema})
+@course_router.put("/{int:course_id}", auth=jwt_auth, response={200: CourseSchema, 403: ErrorSchema, 404: ErrorSchema})
 def update_course(request, course_id: int, data: CourseUpdateSchema):
     course = get_object_or_404(Course, id=course_id)
 
@@ -259,7 +259,7 @@ def update_course(request, course_id: int, data: CourseUpdateSchema):
     return 200, course
 
 
-@course_router.delete("/{course_id}", auth=jwt_auth, response={200: dict, 403: ErrorSchema, 404: ErrorSchema})
+@course_router.delete("/{int:course_id}", auth=jwt_auth, response={200: dict, 403: ErrorSchema, 404: ErrorSchema})
 def delete_course(request, course_id: int):
     course = get_object_or_404(Course, id=course_id)
 
